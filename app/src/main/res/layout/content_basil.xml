@@ -13,12 +13,24 @@
     tools:context="edu.oit.basil.BASIL"
     tools:showIn="@layout/activity_basil">
 
+    <!--
+        These buttons will have a different text corresponding the the Bluetooth connection
+        name for different IDs, but in our implementation, we will only have one connection.
+      -->
+    <Button
+        android:id="@+id/Button0"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Button0"
+        android:onClick="btControl"/>
+
     <Button
         android:id="@+id/Button1"
+        android:layout_below="@id/Button0"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Button1"
-        android:onClick="someFunction"/>
+        android:onClick="btControl"/>
 
     <Button
         android:id="@+id/Button2"
@@ -26,5 +38,21 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Button2"
-        android:onClick="secondFunction"/>
+        android:onClick="btControl"/>
+
+    <Button
+        android:id="@+id/Button3"
+        android:layout_below="@id/Button2"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Button3"
+        android:onClick="btControl"/>
+
+    <Button
+        android:id="@+id/Button4"
+        android:layout_below="@id/Button3"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="Button4"
+        android:onClick="btControl"/>
 </RelativeLayout>
