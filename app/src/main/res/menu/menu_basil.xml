@@ -1,3 +1,12 @@
+<!-- Not sure if I want to implement a settings button for this
+    app. Need to determine if there are settings that we want
+    the user to adjust in the app.
+
+    There would be some easy to adjust settings like colors and
+    fonts, but this app is so simple that this may be overkill
+    trying to make it look good and behave like a real app.
+    -->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"

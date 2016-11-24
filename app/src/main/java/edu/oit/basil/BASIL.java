@@ -10,11 +10,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.widget.Button;
 
 import java.io.File;
 import java.io.IOException;
 
 public class BASIL extends AppCompatActivity {
+    //This is the maximum number of connections we will allow at a time
+    private final static int MAX_CONNECTIONS = 5;
+    private static int numConnections;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +26,20 @@ public class BASIL extends AppCompatActivity {
         setContentView(R.layout.activity_basil);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        File appFile;
-        int numConnections = getNumConnections();
-        appFile = new File(Environment.getDataDirectory() + File.separator + R.string.app_name);
 
-        try{
-            appFile.createNewFile();
-        } catch (IOException e) {
-            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG).show();
-        }
+        File appFile;
+        numConnections = getNumConnections();
+        Button button0 = (Button) findViewById(R.id.Button0);
+        Button button1 = (Button) findViewById(R.id.Button1);
+        Button button2 = (Button) findViewById(R.id.Button2);
+        Button button3 = (Button) findViewById(R.id.Button3);
+        Button button4 = (Button) findViewById(R.id.Button4);
+
+        //TODO: Create a vector for the buttons to easily iterate
+
+        //TODO: Use internal storage in lieu of this implementation
+        //See https://developer.android.com/training/basics/data-storage/files.html
+        appFile = new File(Environment.getDataDirectory() + File.separator + R.string.app_name);
 
         //TODO: Use getNumConnections to determine the number of buttons that should be visible
 
@@ -42,6 +51,27 @@ public class BASIL extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        try{
+            appFile.createNewFile();
+        } catch (IOException e) {
+            //TODO: Output exction to user
+        }
+
+        switch (numConnections){
+            case 5:
+                button4.setVisibility(View.VISIBLE);
+            case 4:
+                button3.setVisibility(View.VISIBLE);
+            case 3:
+                button2.setVisibility(View.VISIBLE);
+            case 2:
+                button1.setVisibility(View.VISIBLE);
+            case 1:
+                button0.setVisibility(View.VISIBLE);
+            default:
+                break;
+        }
     }
 
     @Override
@@ -82,11 +112,15 @@ public class BASIL extends AppCompatActivity {
      * connect to that device and take appropriate action.
      */
     private int getNumConnections(){
-        return 2; //For testing
+        return 3; //For testing
     }
 
     //TODO: Complete the following methods to add and remove BT Connections
     private void addConnection(){ //This needs to have a Bluetooth parameter
+        if(numConnections == MAX_CONNECTIONS){
+            Toast.makeText(getBaseContext(), R.string.max_connections, Toast.LENGTH_LONG);
+            return;
+        }
 
     }
 
