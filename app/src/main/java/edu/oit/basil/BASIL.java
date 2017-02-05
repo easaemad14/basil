@@ -18,7 +18,7 @@ import java.io.IOException;
 public class BASIL extends AppCompatActivity {
     //This is the maximum number of connections we will allow at a time
     private final static int MAX_CONNECTIONS = 5;
-    private static int numConnections;
+    private int numConnections;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,36 +27,33 @@ public class BASIL extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //TODO: Open the file with connection information and read
+        //TODO: Use internal storage in lieu of this implementation
+        //See https://developer.android.com/training/basics/data-storage/files.html
+        File rDir = getFilesDir();
         File appFile;
-        numConnections = getNumConnections();
+
+        //TODO: Use getNumConnections to determine the number of buttons that should be visible
+        if ((numConnections = getNumConnections()) >= MAX_CONNECTIONS){
+            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG);
+        }
+
+        //TODO: Create a vector for the buttons to easily iterate
+        //TODO: Delete these after you create vector and iterate
         Button button0 = (Button) findViewById(R.id.Button0);
         Button button1 = (Button) findViewById(R.id.Button1);
         Button button2 = (Button) findViewById(R.id.Button2);
         Button button3 = (Button) findViewById(R.id.Button3);
         Button button4 = (Button) findViewById(R.id.Button4);
 
-        //TODO: Create a vector for the buttons to easily iterate
-
-        //TODO: Use internal storage in lieu of this implementation
-        //See https://developer.android.com/training/basics/data-storage/files.html
-        appFile = new File(Environment.getDataDirectory() + File.separator + R.string.app_name);
-
-        //TODO: Use getNumConnections to determine the number of buttons that should be visible
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_bluetooth_device);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Add Bluetooth Device not implemented", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, R.string.bluetooth_error, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-
-        try{
-            appFile.createNewFile();
-        } catch (IOException e) {
-            //TODO: Output exction to user
-        }
 
         switch (numConnections){
             case 5:
@@ -118,13 +115,14 @@ public class BASIL extends AppCompatActivity {
     //TODO: Complete the following methods to add and remove BT Connections
     private void addConnection(){ //This needs to have a Bluetooth parameter
         if(numConnections == MAX_CONNECTIONS){
-            Toast.makeText(getBaseContext(), R.string.max_connections, Toast.LENGTH_LONG);
+            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG);
             return;
         }
 
+        //. . .
     }
 
-    private void rmConnection(){ //This needs to have a Bluetooth parameter
+    private void rmConnection(){ //Read our file and delete the line with this button name
 
     }
 }

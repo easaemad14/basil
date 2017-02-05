@@ -16,12 +16,20 @@
     <!--
         These buttons will have a different text corresponding the the Bluetooth connection
         name for different IDs, but in our implementation, we will only have one connection.
+
+        These are the default values for each button. Visibility is set in Basil.java. Once
+        I get good, I will set the layout of each button there, as well as text based off of
+        the connect that it represents (read from a file) and any other information.
       -->
     <Button
         android:id="@+id/Button0"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_alignParentTop="true"
         android:text="Button0"
+        android:textColor="@color/colorCaramel"
+        android:textSize="20dp"
+        android:background="@color/colorBasil"
         android:onClick="btControl"
         android:longClickable="true"
         android:visibility="gone"/>
@@ -32,6 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Button1"
+        android:background="@color/colorCaramel"
+        android:textSize="20dp"
         android:onClick="btControl"
         android:longClickable="true"
         android:visibility="gone"/>
@@ -42,6 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Button2"
+        android:background="@color/colorCaramel"
+        android:textSize="20dp"
         android:onClick="btControl"
         android:longClickable="true"
         android:visibility="gone"/>
@@ -52,6 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Button3"
+        android:background="@color/colorCaramel"
+        android:textSize="20dp"
         android:onClick="btControl"
         android:longClickable="true"
         android:visibility="gone"/>
@@ -62,6 +76,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Button4"
+        android:background="@color/colorCaramel"
+        android:textSize="20dp"
         android:onClick="btControl"
         android:longClickable="true"
         android:visibility="gone"/>

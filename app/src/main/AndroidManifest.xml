@@ -2,21 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.oit.basil"
     android:versionCode="1"
-    android:versionName="0.0.1">
+    android:versionName="1.0">
 
-    <!-- Jelly bean (4.3.x) is min supported, and max should be dynamic -->
-    <uses-sdk
-        android:minSdkVersion="18"
-        android:maxSdkVersion="25"></uses-sdk>
-
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="25"/>
     <!-- Permissions are as follows:
         Bluetooth: Needed for connecting to our PIC32 microcontroller
         File Access: We will store data in a directory (if we use getFilesDir(), need?)
         Location: We will use phone's GPS to save location used
             -->
     <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+
+    <!-- These permissions aren't used yet. Probably won't need Ext Storage
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+        -->
 
     <application
         android:allowBackup="true"
