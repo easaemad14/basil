@@ -14,9 +14,11 @@ import android.widget.Button;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BASIL extends AppCompatActivity {
-    //This is the maximum number of connections we will allow at a time
+    //Our global variables
     private final static int MAX_CONNECTIONS = 5;
     private int numConnections;
 
@@ -32,19 +34,28 @@ public class BASIL extends AppCompatActivity {
         //See https://developer.android.com/training/basics/data-storage/files.html
         File rDir = getFilesDir();
         File appFile;
+        numConnections = getNumConnections(); //This will be set when we read our file
+        List<Button> bList = new ArrayList<Button>();
+        List<String> bName = new ArrayList<String>();
 
-        //TODO: Use getNumConnections to determine the number of buttons that should be visible
-        if ((numConnections = getNumConnections()) >= MAX_CONNECTIONS){
-            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG);
+        //SOME TESTING BITS
+        bName.add("MR2");
+        bName.add("Tacoma");
+        bList.add((Button) findViewById(R.id.Button0));
+        bList.add((Button) findViewById(R.id.Button1));
+        for(int i = 0; i < numConnections; i++){
+            bList.get(i).setText(bName.get(i));
+            bList.get(i).setVisibility(View.VISIBLE);
+
+            bList.get(i).setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view){
+                    //TODO: Give the user the ability to rename and delete connections
+
+                    return true;
+                }
+            });
         }
-
-        //TODO: Create a vector for the buttons to easily iterate
-        //TODO: Delete these after you create vector and iterate
-        Button button0 = (Button) findViewById(R.id.Button0);
-        Button button1 = (Button) findViewById(R.id.Button1);
-        Button button2 = (Button) findViewById(R.id.Button2);
-        Button button3 = (Button) findViewById(R.id.Button3);
-        Button button4 = (Button) findViewById(R.id.Button4);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_bluetooth_device);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,23 +65,10 @@ public class BASIL extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        switch (numConnections){
-            case 5:
-                button4.setVisibility(View.VISIBLE);
-            case 4:
-                button3.setVisibility(View.VISIBLE);
-            case 3:
-                button2.setVisibility(View.VISIBLE);
-            case 2:
-                button1.setVisibility(View.VISIBLE);
-            case 1:
-                button0.setVisibility(View.VISIBLE);
-            default:
-                break;
-        }
     }
 
+    /* May be implemented in the future
+     * TODO: Study this to add options on long click and fab
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -92,15 +90,12 @@ public class BASIL extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    */
 
-    //TODO: Make sure non-visible buttons can't be clicked, or handle this
-    /**
-     * This is the method that is called when any (visible) button is clicked. Need
-     * to use R class(?) to differentiate which bt connection is being made and handled.
-     */
     public void btControl(View view){
         //TODO: implement connection check and implement a fragment(?) for (un)lock functions
     }
+
     /**
      * This will return the number of stored Bluetooth Connections that are in our
      * "database" of Bluetooth devices that is read from the BASIL data file.
@@ -109,13 +104,20 @@ public class BASIL extends AppCompatActivity {
      * connect to that device and take appropriate action.
      */
     private int getNumConnections(){
-        return 3; //For testing
+        int cons = 6;
+
+        if(cons > MAX_CONNECTIONS){
+            cons = 2; //For testing
+        }
+
+        return cons;
     }
 
     //TODO: Complete the following methods to add and remove BT Connections
     private void addConnection(){ //This needs to have a Bluetooth parameter
         if(numConnections == MAX_CONNECTIONS){
-            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG);
+            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG)
+                .show();
             return;
         }
 
