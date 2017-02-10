@@ -12,6 +12,15 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\transition\25.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="0c6d948e6cb9ea6f535d175fb61ba2930719c0e9">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-transition-25.0.0_e2134938d4d62e4517c26365533f8bdb7475df0a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -30,6 +39,24 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="53a420cd4f49274db6bd43475f8006ba67ef6bbd">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.0.0_2f373825a07f0500166de86265565ed4455c77d2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="8bc45ce1f63d1a391fd38b32a201be5a42f9c95d">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.0.0_6564b2c98f7266879c4dc3dc91ef7b3c66afda7f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.0\jars\classes.jar"
         jumboMode="true"
         optimize="true"
@@ -39,12 +66,57 @@
     </item>
     <item
         is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.0\jars\libs\internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="3b61a70884adaf0be3fc06c70c801e3e6df13133">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.0_7318351a63f6e0e72bb337705eaaf37ba9242e5e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.0.0\jars\libs\internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="665d21a8a069c96b4d9e8b434f5096d865b4e261">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.0_2d3c1a0ca72598b9a78389bc36440f9e54e7863a\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="eee339ac6b59cbe7e15fdb428df426b9496d36fa">
+        sha1="bf559e1183786616f84fed811097d0392d8e4fb3">
         <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_7001d3eadd02d18cffbf7c363363745741dbf6b1\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="26674000177e45447a0326a6ad84612761199a13">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.0.0_dcd0f594f34ec14ce608079efd35e32dfc5eadb9\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\design\25.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="26384be22ddc74cfe197ebda9edbc7d1fd8bd537">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-25.0.0_0c9622c7b5307322fb2e1681127162fc4c6b7caf\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.0\jars\libs\internal_impl-25.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f2e3b9bc1ec25f652e8007ce7774c991e38f6a00">
+        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.0_91d29e1139970469aec3135a6912b7399791907d\classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -52,7 +124,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="504c16462e99096f9f02d3b4407a474c760b3c4e">
+        sha1="bdd8aefd8008e114f3b2d2dc710157152e79a6ee">
         <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_679b60e6d15fed3b6926f80ccd77d9c717dad9bf\classes.dex" />
     </item>
     <item
@@ -90,78 +162,6 @@
         revision="25.0.0"
         sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
         <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-25.0.0_0c9d337f6e6f84285fbd54955e9fa722151606e5\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\transition\25.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="0c6d948e6cb9ea6f535d175fb61ba2930719c0e9">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-transition-25.0.0_e2134938d4d62e4517c26365533f8bdb7475df0a\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="53a420cd4f49274db6bd43475f8006ba67ef6bbd">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-25.0.0_2f373825a07f0500166de86265565ed4455c77d2\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="8bc45ce1f63d1a391fd38b32a201be5a42f9c95d">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-25.0.0_6564b2c98f7266879c4dc3dc91ef7b3c66afda7f\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.0.0\jars\libs\internal_impl-25.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="3b61a70884adaf0be3fc06c70c801e3e6df13133">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.0_7318351a63f6e0e72bb337705eaaf37ba9242e5e\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.0.0\jars\libs\internal_impl-25.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="665d21a8a069c96b4d9e8b434f5096d865b4e261">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.0_2d3c1a0ca72598b9a78389bc36440f9e54e7863a\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="26674000177e45447a0326a6ad84612761199a13">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-25.0.0_dcd0f594f34ec14ce608079efd35e32dfc5eadb9\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\design\25.0.0\jars\classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="26384be22ddc74cfe197ebda9edbc7d1fd8bd537">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-25.0.0_0c9622c7b5307322fb2e1681127162fc4c6b7caf\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.0.0\jars\libs\internal_impl-25.0.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.0"
-        sha1="f2e3b9bc1ec25f652e8007ce7774c991e38f6a00">
-        <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-25.0.0_91d29e1139970469aec3135a6912b7399791907d\classes.dex" />
     </item>
     <item
         is-multidex="true"

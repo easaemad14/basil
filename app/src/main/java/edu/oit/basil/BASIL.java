@@ -1,7 +1,6 @@
 package edu.oit.basil;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,15 +11,29 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import android.widget.Button;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BASIL extends AppCompatActivity {
     //Our global variables
     private final static int MAX_CONNECTIONS = 5;
     private int numConnections;
+    List<Button> butList = new ArrayList<Button>();
+
+    // If File information ever changes, there's a potential to lose data.
+    // In this event, be sure to adjust accordingly.
+    File conFile;
+    String conFileName = "myConnections.txt";
+    FileInputStream conInStream;
+    FileOutputStream conOutStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,33 +42,24 @@ public class BASIL extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //TODO: Open the file with connection information and read
-        //TODO: Use internal storage in lieu of this implementation
-        //See https://developer.android.com/training/basics/data-storage/files.html
-        File rDir = getFilesDir();
-        File appFile;
-        numConnections = getNumConnections(); //This will be set when we read our file
-        List<Button> bList = new ArrayList<Button>();
-        List<String> bName = new ArrayList<String>();
+        // I don't know a better way to do this
+        butList.add((Button) findViewById(R.id.Button0));
+        butList.add((Button) findViewById(R.id.Button1));
+        butList.add((Button) findViewById(R.id.Button2));
+        butList.add((Button) findViewById(R.id.Button3));
+        butList.add((Button) findViewById(R.id.Button4));
 
-        //SOME TESTING BITS
-        bName.add("MR2");
-        bName.add("Tacoma");
-        bList.add((Button) findViewById(R.id.Button0));
-        bList.add((Button) findViewById(R.id.Button1));
-        for(int i = 0; i < numConnections; i++){
-            bList.get(i).setText(bName.get(i));
-            bList.get(i).setVisibility(View.VISIBLE);
-
-            bList.get(i).setOnLongClickListener(new View.OnLongClickListener(){
-                @Override
-                public boolean onLongClick(View view){
-                    //TODO: Give the user the ability to rename and delete connections
-
-                    return true;
-                }
-            });
+        if((numConnections = getNumConnections()) < 0){ //Halt and catch fire!
+            Toast.makeText(getBaseContext(), R.string.fio_error, Toast.LENGTH_LONG);
+            try{
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            System.exit(0);
         }
+
+        //TODO: Write a file to test the ability to do so and check our getNumConnections functionality
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_bluetooth_device);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -104,20 +108,48 @@ public class BASIL extends AppCompatActivity {
      * connect to that device and take appropriate action.
      */
     private int getNumConnections(){
-        int cons = 6;
+        int cons = 0;
+        String conLine;
+        String[] conInfo;
+        conFile = new File(getBaseContext().getFilesDir(), conFileName);
 
-        if(cons > MAX_CONNECTIONS){
-            cons = 2; //For testing
+        if(!conFile.exists()){
+            try{
+                conFile.createNewFile();
+            } catch (IOException | SecurityException e){
+                e.printStackTrace();
+            }
         }
 
-        return cons;
+        try{
+            conInStream = openFileInput(conFileName);
+            BufferedReader buf = new BufferedReader(new InputStreamReader(conInStream));
+            conLine = buf.readLine();
+
+            while(conLine != null){
+                conInfo = conLine.split("/");
+                butList.get(cons).setText(conInfo[0]); //"Name/UID"
+                butList.get(cons).setVisibility(View.VISIBLE);
+                cons++;
+            }
+
+            conInStream.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+        if(cons >= MAX_CONNECTIONS){
+            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG).show();
+            cons = MAX_CONNECTIONS - 1;
+        }
+
+        return ++cons;
     }
 
     //TODO: Complete the following methods to add and remove BT Connections
     private void addConnection(){ //This needs to have a Bluetooth parameter
-        if(numConnections == MAX_CONNECTIONS){
-            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG)
-                .show();
+        if(numConnections >= MAX_CONNECTIONS){ //Don't add if you've reached max (or beyond)
+            Toast.makeText(getBaseContext(), R.string.too_many_connections, Toast.LENGTH_LONG).show();
             return;
         }
 
