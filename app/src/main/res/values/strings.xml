@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">BASIL</string>
     <string name="action_settings">Settings</string>
+    <!--
     <string name="bluetooth_error">Bluetooth couldn\'t connect</string>
+        -->
     <string name="too_many_connections">Please remove unused connections</string>
     <string name="fio_error">(FATAL) Error saving connections!</string>
+    <string name="create_file">Local File Created</string>
 </resources>
