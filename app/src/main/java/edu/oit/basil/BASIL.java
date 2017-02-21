@@ -29,7 +29,7 @@ public class BASIL extends AppCompatActivity {
     //Our global variables
     private final static int MAX_CONNECTIONS = 5;
     private final static int REQUEST_ENABLE_BT = 1;
-    private static int BT_MODE = 0;
+    private final static int REQUEST_CONTROL_MOTOR = 2;
     private int numConnections;
     List<Button> butList = new ArrayList<Button>();
     BluetoothAdapter btAdapter;
@@ -69,7 +69,8 @@ public class BASIL extends AppCompatActivity {
         // We need to set up our BlueTooth adapter
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if(btAdapter == null) {
-            Toast.makeText(getBaseContext(), R.string.no_bluetooth, Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), R.string.no_bluetooth,
+                    Toast.LENGTH_LONG).show();
         }
         else if(!btAdapter.isEnabled()) {
             Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -78,7 +79,8 @@ public class BASIL extends AppCompatActivity {
 
         numConnections = getNumConnections();
         if(numConnections < 0) { //Halt and catch fire!
-            Toast.makeText(getBaseContext(), R.string.fio_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), R.string.fio_error,
+                    Toast.LENGTH_LONG).show();
             try {
                 TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {
@@ -90,15 +92,17 @@ public class BASIL extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_ENABLE_BT) {
-            if(resultCode == RESULT_OK) {
-                BT_MODE = 1;
-            }
-            else {
-                BT_MODE = 0;
-                Toast.makeText(getBaseContext(), R.string.bt_mode_disabled,
-                        Toast.LENGTH_LONG).show();
-            }
+        switch (requestCode){
+            case REQUEST_ENABLE_BT:
+                if(resultCode != RESULT_OK){
+                    Toast.makeText(this, R.string.bt_mode_disabled, Toast.LENGTH_LONG).show();
+                }
+                break;
+            case REQUEST_CONTROL_MOTOR:
+                // Do some stuff
+                break;
+            default:
+                // More will be needed when I implement additional activities
         }
     }
 
@@ -128,7 +132,11 @@ public class BASIL extends AppCompatActivity {
     */
 
     public void btControl(View view) {
-        //TODO: implement connection check and implement a fragment(?) for (un)lock functions
+        // TODO: Menu inflator for lock/unlock option handled by our intent
+        /*
+        Intent motorControl = new Intent();
+        startActivityForResult(motorControl, REQUEST_CONTROL_MOTOR);
+        */
     }
 
     /**
@@ -156,6 +164,7 @@ public class BASIL extends AppCompatActivity {
             return cons;
         }
 
+        // TODO: Replace this with Queried devices
         try {
             conInStream = openFileInput(conFileName);
             BufferedReader buf = new BufferedReader(new InputStreamReader(conInStream));
@@ -184,12 +193,13 @@ public class BASIL extends AppCompatActivity {
         }
 
         // Check to see if we are running in BlueTooth mode
-        if(BT_MODE == 0) {
-            Toast.makeText(getBaseContext(), R.string.bt_mode_disabled, Toast.LENGTH_LONG).show();
+        if(!btAdapter.isEnabled()) {
+            Toast.makeText(getBaseContext(), R.string.bt_mode_disabled,
+                    Toast.LENGTH_LONG).show();
             return numConnections;
         }
 
-        //TODO: Need to start a fragment for user selection here?
+        //TODO: Hack this to only use available connections
 
         // Let's start searching for discoverable devices
         if(!btAdapter.startDiscovery()) {
@@ -197,8 +207,6 @@ public class BASIL extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             return numConnections;
         }
-
-        //TODO: Search for discoverable devices
 
         //TODO: Query paired devices for Name and MAC (conInfo[0] and conInfo[1], respectively)
         Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
@@ -215,7 +223,8 @@ public class BASIL extends AppCompatActivity {
         //String toyota = "MR2/12:34:56:78:43:AA" + System.getProperty("line.separator");
 
         if(!conFile.canWrite()) {
-            Toast.makeText(getBaseContext(), R.string.fio_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), R.string.fio_error,
+                    Toast.LENGTH_LONG).show();
             return numConnections;
         }
         else {
@@ -233,10 +242,10 @@ public class BASIL extends AppCompatActivity {
     }
 
     private void rmConnection() { //Read our file and delete the line with this button name
-        //TODO: Implement the ability to remove a connection
+        //TODO: Implement the ability to remove a connection on long click
     }
 
     private void clearAllCons() { //Used to reset the connection database from menu
-        //TODO: Add the option to delete the file and start from scratch
+        //TODO: Add the option to delete the file and start from scratch from options menu
     }
 }
