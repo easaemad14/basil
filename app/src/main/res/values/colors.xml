@@ -6,4 +6,6 @@
     <color name="colorBasil">#669933</color>
     <color name="colorCaramel">#65350F</color>
     <color name="colorPureWhite">#FFFFFF</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

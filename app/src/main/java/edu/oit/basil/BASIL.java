@@ -26,11 +26,11 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class BASIL extends AppCompatActivity {
-    //Our global variables
     private final static int MAX_CONNECTIONS = 5;
     private final static int REQUEST_ENABLE_BT = 1;
     private final static int REQUEST_CONTROL_MOTOR = 2;
-    private int numConnections;
+    private final static int NEW_CONNECTION = 3;
+    private int numConnections = 0;
     List<Button> butList = new ArrayList<Button>();
     BluetoothAdapter btAdapter;
 
@@ -38,10 +38,6 @@ public class BASIL extends AppCompatActivity {
     // In this event, be sure to adjust accordingly.
     File conFile;
     final String conFileName = "myConnections.txt";
-
-    // TODO: Move these variables to their respective methods; don't need to be global
-    FileInputStream conInStream;
-    FileOutputStream conOutStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,31 +47,12 @@ public class BASIL extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // This represents the 5 possible usable buttons
+        // I could do this dynamically with a ViewGroup
         butList.add((Button) findViewById(R.id.Button0));
         butList.add((Button) findViewById(R.id.Button1));
         butList.add((Button) findViewById(R.id.Button2));
         butList.add((Button) findViewById(R.id.Button3));
         butList.add((Button) findViewById(R.id.Button4));
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_bluetooth_device);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //This is done for testing purposes. Checking the ability to read and write files
-                numConnections = addConnection();
-            }
-        });
-
-        // We need to set up our BlueTooth adapter
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(btAdapter == null) {
-            Toast.makeText(getBaseContext(), R.string.no_bluetooth,
-                    Toast.LENGTH_LONG).show();
-        }
-        else if(!btAdapter.isEnabled()) {
-            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
-        }
 
         numConnections = getNumConnections();
         if(numConnections < 0) { //Halt and catch fire!
@@ -88,6 +65,39 @@ public class BASIL extends AppCompatActivity {
             }
             System.exit(0);
         }
+
+        // We need to set up our BlueTooth adapter
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(btAdapter == null) {
+            Toast.makeText(getBaseContext(), R.string.no_bluetooth,
+                    Toast.LENGTH_LONG).show();
+        }
+        else if(!btAdapter.isEnabled()) {
+            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
+        }
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_bluetooth_device);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(numConnections >= MAX_CONNECTIONS) { //Don't add if you've reached max (or beyond)
+                    Toast.makeText(getBaseContext(), R.string.too_many_connections,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // Check to see if we are running in BlueTooth mode
+                if(btAdapter == null || !btAdapter.isEnabled()) {
+                    Toast.makeText(getBaseContext(), R.string.bt_mode_disabled,
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent getNewConnection = new Intent(getBaseContext(), BtDiscovery.class);
+                    startActivityForResult(getNewConnection, NEW_CONNECTION);
+                }
+            }
+        });
     }
 
     @Override
@@ -99,7 +109,16 @@ public class BASIL extends AppCompatActivity {
                 }
                 break;
             case REQUEST_CONTROL_MOTOR:
-                // Do some stuff
+                /**
+                 * I need to have a connectible device that has the ability to communicate
+                 * with in order to test this.
+                 *
+                 * The firmware will need to know the state of the lock (locked or unlocked)
+                 * so that the user will know the state before toggling.
+                 */
+                break;
+            case NEW_CONNECTION: // Write the new connection to file and make visible
+                addConnection(data.getStringExtra("RETURNED_CONNECTION"));
                 break;
             default:
                 // More will be needed when I implement additional activities
@@ -132,11 +151,7 @@ public class BASIL extends AppCompatActivity {
     */
 
     public void btControl(View view) {
-        // TODO: Menu inflator for lock/unlock option handled by our intent
-        /*
-        Intent motorControl = new Intent();
-        startActivityForResult(motorControl, REQUEST_CONTROL_MOTOR);
-        */
+        // TODO: Decide how to handle (un)lock functionality
     }
 
     /**
@@ -150,6 +165,7 @@ public class BASIL extends AppCompatActivity {
         int cons = 0;
         String conLine;
         String[] conInfo;
+        FileInputStream conInStream;
         conFile = new File(getBaseContext().getFilesDir(), conFileName);
 
         if(!conFile.exists()) {
@@ -164,7 +180,6 @@ public class BASIL extends AppCompatActivity {
             return cons;
         }
 
-        // TODO: Replace this with Queried devices
         try {
             conInStream = openFileInput(conFileName);
             BufferedReader buf = new BufferedReader(new InputStreamReader(conInStream));
@@ -172,7 +187,7 @@ public class BASIL extends AppCompatActivity {
 
             while(conLine != null && cons < MAX_CONNECTIONS) {
                 conInfo = conLine.split("/");
-                butList.get(cons).setText(conInfo[0]); //"Name/MAC"
+                butList.get(cons).setText(conInfo[0]); //"Name/Address"
                 butList.get(cons).setVisibility(View.VISIBLE);
                 conLine = buf.readLine();
                 ++cons;
@@ -184,53 +199,50 @@ public class BASIL extends AppCompatActivity {
         return cons;
     }
 
-    //TODO: Complete the following methods to add and remove BT Connections
-    private int addConnection() {
-        if(numConnections >= MAX_CONNECTIONS) { //Don't add if you've reached max (or beyond)
-            Toast.makeText(getBaseContext(), R.string.too_many_connections,
-                    Toast.LENGTH_LONG).show();
-            return MAX_CONNECTIONS;
+    private void addConnection(String connToAdd) {
+        if(connToAdd == null || connToAdd.isEmpty()){
+            Toast.makeText(getBaseContext(), R.string.nothing_to_add, Toast.LENGTH_LONG).show();
+            return;
         }
 
-        // Check to see if we are running in BlueTooth mode
-        if(!btAdapter.isEnabled()) {
-            Toast.makeText(getBaseContext(), R.string.bt_mode_disabled,
-                    Toast.LENGTH_LONG).show();
-            return numConnections;
-        }
+        // First, let's make sure the connection doesn't exist
+        try {
+            String conLine;
+            String[] conInfo, conToAddInfo;
+            conToAddInfo = connToAdd.split("/");
+            FileInputStream conInStream;
 
-        //TODO: Hack this to only use available connections
+            conInStream = openFileInput(conFileName);
+            BufferedReader buf = new BufferedReader(new InputStreamReader(conInStream));
+            conLine = buf.readLine();
 
-        // Let's start searching for discoverable devices
-        if(!btAdapter.startDiscovery()) {
-            Toast.makeText(getBaseContext(), R.string.bluetooth_discover_error,
-                    Toast.LENGTH_LONG).show();
-            return numConnections;
-        }
+            while(conLine != null) {
+                conInfo = conLine.split("/");
 
-        //TODO: Query paired devices for Name and MAC (conInfo[0] and conInfo[1], respectively)
-        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-        if(pairedDevices.size() > 0) {
-            for(BluetoothDevice device : pairedDevices) {
-                String deviceName = device.getName();
-                String deviceMAC = device.getAddress();
-
-                // Check the connection trying to be made to ensure that it isn't already paired
+                if(conInfo[1].equals(conToAddInfo[1])) {
+                    Toast.makeText(getBaseContext(), R.string.connection_exists,
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                conLine = buf.readLine();
             }
+            conInStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        // Testing purposes
-        //String toyota = "MR2/12:34:56:78:43:AA" + System.getProperty("line.separator");
+        // Make sure to append newline when writing
+        connToAdd += System.getProperty("line.separator");
 
         if(!conFile.canWrite()) {
             Toast.makeText(getBaseContext(), R.string.fio_error,
                     Toast.LENGTH_LONG).show();
-            return numConnections;
         }
         else {
+            FileOutputStream conOutStream;
             try {
                 conOutStream = openFileOutput(conFileName, getBaseContext().MODE_APPEND);
-                //conOutStream.write(toyota.getBytes());
+                conOutStream.write(connToAdd.getBytes());
                 conOutStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -238,7 +250,6 @@ public class BASIL extends AppCompatActivity {
         }
 
         numConnections = getNumConnections(); // Increment and add make button visible
-        return numConnections;
     }
 
     private void rmConnection() { //Read our file and delete the line with this button name

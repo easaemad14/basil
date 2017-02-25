@@ -8,4 +8,10 @@
     <string name="no_bluetooth">Device does not support Bluetooth</string>
     <string name="bt_mode_disabled">BlueTooth Disabled Some Features Unavailable</string>
     <string name="bluetooth_discover_error">Unable to search for devices</string>
+    <string name="nothing_to_add">Empty Connection Returned</string>
+    <string name="connection_exists">Connection already exists</string>
+
+    <string name="title_activity_bt_discovery">Searching for BlueTooth Devices</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
