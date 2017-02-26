@@ -34,7 +34,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="2c32704a2134167466244d0aa06c1176242afa30">
+        sha1="97582668eed85a337ac1b1f0fd71978bbcb070d5">
         <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_7001d3eadd02d18cffbf7c363363745741dbf6b1\classes.dex" />
     </item>
     <item
@@ -43,7 +43,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.0"
-        sha1="ceb8b333edc7a84257d7a2c28e183db86eb739cc">
+        sha1="0eebcb7146de1a1bdcd1249a9861dc6d32bc287b">
         <dex dex="C:\Users\eazy\Documents\GitHub\basil\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_679b60e6d15fed3b6926f80ccd77d9c717dad9bf\classes.dex" />
     </item>
     <item

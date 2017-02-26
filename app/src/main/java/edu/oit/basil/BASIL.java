@@ -1,11 +1,9 @@
 package edu.oit.basil;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -22,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class BASIL extends AppCompatActivity {
@@ -30,6 +27,7 @@ public class BASIL extends AppCompatActivity {
     private final static int REQUEST_ENABLE_BT = 1;
     private final static int REQUEST_CONTROL_MOTOR = 2;
     private final static int NEW_CONNECTION = 3;
+    private int btToggled = 0; // If we turned on BT for our app, turn off when done
     private int numConnections = 0;
     List<Button> butList = new ArrayList<Button>();
     BluetoothAdapter btAdapter;
@@ -66,6 +64,20 @@ public class BASIL extends AppCompatActivity {
             System.exit(0);
         }
 
+        // Set up Long Click Listeners for buttons
+        for(final Button bts : butList){
+            bts.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    // TODO: Fix this to give the user the option
+                    String connToRemove = bts.getText().toString();
+                    rmConnection(connToRemove);
+                    numConnections = getNumConnections(); // Rewrite UI
+                    return true;
+                }
+            });
+        }
+
         // We need to set up our BlueTooth adapter
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if(btAdapter == null) {
@@ -81,7 +93,7 @@ public class BASIL extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(numConnections >= MAX_CONNECTIONS) { //Don't add if you've reached max (or beyond)
+                if(numConnections >= MAX_CONNECTIONS) { //Don't add if you've reached max
                     Toast.makeText(getBaseContext(), R.string.too_many_connections,
                             Toast.LENGTH_LONG).show();
                     return;
@@ -105,7 +117,11 @@ public class BASIL extends AppCompatActivity {
         switch (requestCode){
             case REQUEST_ENABLE_BT:
                 if(resultCode != RESULT_OK){
-                    Toast.makeText(this, R.string.bt_mode_disabled, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.bt_mode_disabled,
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    btToggled = 1;
                 }
                 break;
             case REQUEST_CONTROL_MOTOR:
@@ -118,37 +134,43 @@ public class BASIL extends AppCompatActivity {
                  */
                 break;
             case NEW_CONNECTION: // Write the new connection to file and make visible
-                addConnection(data.getStringExtra("RETURNED_CONNECTION"));
+                if(resultCode == RESULT_OK) {
+                    addConnection(data.getStringExtra("RETURNED_CONNECTION"));
+                }
                 break;
             default:
                 // More will be needed when I implement additional activities
         }
     }
 
-    /* May be implemented in the future
-     * TODO: Study this to add options on long click and fab
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if(btAdapter != null && btToggled == 1) {
+            btAdapter.disable();
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_basil, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.information) {
             return true;
+        }
+        else if(id == R.id.clear_connections){
+            clearAllCons();
         }
 
         return super.onOptionsItemSelected(item);
     }
-    */
 
     public void btControl(View view) {
         // TODO: Decide how to handle (un)lock functionality
@@ -167,6 +189,11 @@ public class BASIL extends AppCompatActivity {
         String[] conInfo;
         FileInputStream conInStream;
         conFile = new File(getBaseContext().getFilesDir(), conFileName);
+
+        // I will use this to redraw the UI, so let's make all buttons invisible here
+        for(Button bts : butList){
+            bts.setVisibility(View.INVISIBLE);
+        }
 
         if(!conFile.exists()) {
             try {
@@ -187,8 +214,11 @@ public class BASIL extends AppCompatActivity {
 
             while(conLine != null && cons < MAX_CONNECTIONS) {
                 conInfo = conLine.split("/");
+
+                // Set up Buttons and Long Click Listeners
                 butList.get(cons).setText(conInfo[0]); //"Name/Address"
                 butList.get(cons).setVisibility(View.VISIBLE);
+
                 conLine = buf.readLine();
                 ++cons;
             }
@@ -252,11 +282,76 @@ public class BASIL extends AppCompatActivity {
         numConnections = getNumConnections(); // Increment and add make button visible
     }
 
-    private void rmConnection() { //Read our file and delete the line with this button name
-        //TODO: Implement the ability to remove a connection on long click
+    private void rmConnection(String ctr) { // Delete the line with this info (name)
+        String tmpFileName = "tmp.txt";
+        String conLine;
+        String[] conInfo;
+        FileInputStream conInStream;
+        FileOutputStream conOutStream;
+        File tmpFile = new File(getBaseContext().getFilesDir(), tmpFileName);
+
+        if(ctr == null || ctr.isEmpty()){
+            Toast.makeText(getBaseContext(), R.string.nothing_to_remove, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Read each line and write the line to the tmp file if it doesn't match
+        try {
+            conInStream = openFileInput(conFileName);
+            conOutStream = openFileOutput(tmpFileName, getBaseContext().MODE_PRIVATE);
+            BufferedReader buf = new BufferedReader(new InputStreamReader(conInStream));
+            conLine = buf.readLine();
+
+            while(conLine != null) {
+                conInfo = conLine.split("/");
+
+                if(!conInfo[0].equals(ctr)) {
+                    conLine += System.getProperty("line.separator");
+                    conOutStream.write(conLine.getBytes());
+
+                    return;
+                }
+                conLine = buf.readLine();
+            }
+            conInStream.close();
+            conOutStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Delete our current file and replace with our tmpFile
+        if(conFile.exists()) {
+            try {
+                if(!conFile.delete()) {
+                    Toast.makeText(getBaseContext(), R.string.delete_file,
+                            Toast.LENGTH_LONG).show();
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+        tmpFile.renameTo(conFile);
     }
 
     private void clearAllCons() { //Used to reset the connection database from menu
-        //TODO: Add the option to delete the file and start from scratch from options menu
+        if (conFile.exists()) {
+            try {
+                if (!conFile.delete()) {
+                    Toast.makeText(getBaseContext(), R.string.delete_file,
+                            Toast.LENGTH_LONG).show();
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+
+            // Now create the empty file
+            try {
+                conFile.createNewFile();
+            } catch (IOException | SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+
+        numConnections = getNumConnections();
     }
 }

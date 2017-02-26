@@ -1,15 +1,12 @@
 package edu.oit.basil;
 
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +29,18 @@ public class BtDiscovery extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_discovery);
 
+        // Implementation of a 5 minute CountDownTimer so that we don't search for too long
+        new CountDownTimer(300000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                // TODO: Display some cool animation so the user knows we're searching
+            }
+            public void onFinish() {
+                Toast.makeText(getBaseContext(), R.string.bluetooth_timeout,
+                        Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }.start();
+
         /*
         // Let's start searching for discoverable devices
         if(!btAdapter.startDiscovery()) {
@@ -39,10 +48,14 @@ public class BtDiscovery extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
             return;
         }
-         */
+        */
 
+        //addConnection("MR2/12:34:56:78");
+    }
+
+    private void addConnection(String connToAdd){
         Intent putConnection = new Intent();
-        putConnection.putExtra("RETURNED_CONNECTION", "MR2/12:34:56:78:AA");
+        putConnection.putExtra("RETURNED_CONNECTION", connToAdd);
         setResult(RESULT_OK, putConnection);
         finish();
     }

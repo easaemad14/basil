@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">BASIL</string>
-    <string name="action_settings">Settings</string>
+    <string name="version_info">App Info</string>
+    <string name="clear_all_connections">Reset connections</string>
+
+    <!-- Main activity strings -->
     <string name="bluetooth_error">Bluetooth couldn\'t connect</string>
     <string name="too_many_connections">Please remove unused connections</string>
     <string name="fio_error">(FATAL) Error saving connections!</string>
@@ -9,9 +12,12 @@
     <string name="bt_mode_disabled">BlueTooth Disabled Some Features Unavailable</string>
     <string name="bluetooth_discover_error">Unable to search for devices</string>
     <string name="nothing_to_add">Empty Connection Returned</string>
+    <string name="nothing_to_remove">Nothing to Remove</string>
     <string name="connection_exists">Connection already exists</string>
+    <string name="delete_file">Error Deleting File</string>
 
+    <!-- Activity BT discovery -->
     <string name="title_activity_bt_discovery">Searching for BlueTooth Devices</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="set_name">Change for Custom Name</string>
+    <string name="bluetooth_timeout">Discovery Timeout!</string>
 </resources>
