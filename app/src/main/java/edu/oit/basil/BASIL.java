@@ -70,6 +70,7 @@ public class BASIL extends AppCompatActivity {
                 @Override
                 public boolean onLongClick(View view) {
                     // TODO: Fix this to give the user the option
+                    // Create menu inflater to delete or rename connection
                     String connToRemove = bts.getText().toString();
                     rmConnection(connToRemove);
                     numConnections = getNumConnections(); // Rewrite UI
@@ -144,7 +145,23 @@ public class BASIL extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onStop() {
+        super.onStop();
+        if(btAdapter != null && btToggled == 1) {
+            btAdapter.disable();
+        }
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(btAdapter != null && btToggled == 1) {
+            btAdapter.enable();
+        }
+    }
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         if(btAdapter != null && btToggled == 1) {
             btAdapter.disable();
@@ -215,7 +232,7 @@ public class BASIL extends AppCompatActivity {
             while(conLine != null && cons < MAX_CONNECTIONS) {
                 conInfo = conLine.split("/");
 
-                // Set up Buttons and Long Click Listeners
+                // Set Button names and make them visible
                 butList.get(cons).setText(conInfo[0]); //"Name/Address"
                 butList.get(cons).setVisibility(View.VISIBLE);
 
