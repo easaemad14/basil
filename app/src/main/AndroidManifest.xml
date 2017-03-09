@@ -10,20 +10,15 @@
     <!--
          Permissions are as follows:
         Bluetooth: Needed for connecting to our PIC32 microcontroller
-        File Access: We will store data in a directory (if we use getFilesDir(), need?)
-        Location: We will use phone's GPS to save location used
+        Location: We will use phone's GPS to save location used (Not implemented yet)
+
+        https://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-hardware-id
+        states that the location permissions are needed.
     -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COURSE_LOCATION" />
 
-    <android:uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!--
- These permissions aren't used yet. Probably won't need Ext Storage
-        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/basil"

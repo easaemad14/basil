@@ -15,10 +15,14 @@
     <string name="nothing_to_remove">Nothing to Remove</string>
     <string name="connection_exists">Connection already exists</string>
     <string name="delete_file">Error Deleting File</string>
+    <string name="unknown_result">Caught Unknown Result</string>
 
     <!-- Activity BT discovery -->
     <string name="title_activity_bt_discovery">Searching for BlueTooth Devices</string>
     <string name="searching">Searching</string>
     <string name="set_name">Change for Custom Name</string>
     <string name="bluetooth_timeout">Discovery Timeout!</string>
+    <string name="bluetooth_discovery_started">Started Discovery</string>
+    <string name="bluetooth_discovery_finished">Finished Discovery</string>
+    <string name="bluetooth_found">Found </string>
 </resources>

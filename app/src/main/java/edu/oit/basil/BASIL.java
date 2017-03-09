@@ -1,6 +1,7 @@
 package edu.oit.basil;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,8 +21,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * TODO: Figure out why I can't discover devices in my app and uncomment everything
+ *
+ * According to the following page, there is this issue, but even when I add the
+ * correct permission, I am still unable to discover devices:
+ * http://stackoverflow.com/questions/34966133/android-bluetooth-discovery-doesnt-find-any-device
+ *
+ *
+ */
 public class BASIL extends AppCompatActivity {
     private final static int MAX_CONNECTIONS = 5;
     private final static int REQUEST_ENABLE_BT = 1;
@@ -34,8 +45,8 @@ public class BASIL extends AppCompatActivity {
 
     // If File information ever changes, there's a potential to lose data.
     // In this event, be sure to adjust accordingly.
-    File conFile;
-    final String conFileName = "myConnections.txt";
+    //File conFile;
+    //final String conFileName = "myConnections.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +56,23 @@ public class BASIL extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // This represents the 5 possible usable buttons
-        // I could do this dynamically with a ViewGroup
+        // I could do this dynamically with a ViewGroup. . .
         butList.add((Button) findViewById(R.id.Button0));
         butList.add((Button) findViewById(R.id.Button1));
         butList.add((Button) findViewById(R.id.Button2));
         butList.add((Button) findViewById(R.id.Button3));
         butList.add((Button) findViewById(R.id.Button4));
+
+        // We need to set up our BlueTooth adapter
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(btAdapter == null) {
+            Toast.makeText(getBaseContext(), R.string.no_bluetooth,
+                    Toast.LENGTH_LONG).show();
+        }
+        else if (!btAdapter.isEnabled()) {
+            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
+        }
 
         numConnections = getNumConnections();
         if(numConnections < 0) { //Halt and catch fire!
@@ -65,6 +87,8 @@ public class BASIL extends AppCompatActivity {
         }
 
         // Set up Long Click Listeners for buttons
+        // TODO: Add a menu inflater to give option to rename and delete
+        /*
         for(final Button bts : butList){
             bts.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -78,18 +102,9 @@ public class BASIL extends AppCompatActivity {
                 }
             });
         }
+        */
 
-        // We need to set up our BlueTooth adapter
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(btAdapter == null) {
-            Toast.makeText(getBaseContext(), R.string.no_bluetooth,
-                    Toast.LENGTH_LONG).show();
-        }
-        else if(!btAdapter.isEnabled()) {
-            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
-        }
-
+        /* Unable to discover devices; user is required to be paired already
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_bluetooth_device);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +126,7 @@ public class BASIL extends AppCompatActivity {
                 }
             }
         });
+        */
     }
 
     @Override
@@ -134,16 +150,20 @@ public class BASIL extends AppCompatActivity {
                  * so that the user will know the state before toggling.
                  */
                 break;
+            /*
             case NEW_CONNECTION: // Write the new connection to file and make visible
                 if(resultCode == RESULT_OK) {
                     addConnection(data.getStringExtra("RETURNED_CONNECTION"));
                 }
                 break;
+            */
             default:
-                // More will be needed when I implement additional activities
+                Toast.makeText(getBaseContext(), R.string.unknown_result,
+                        Toast.LENGTH_SHORT).show();
         }
     }
 
+    /* this is disabled when the second activity is called
     @Override
     protected void onStop() {
         super.onStop();
@@ -160,15 +180,18 @@ public class BASIL extends AppCompatActivity {
             btAdapter.enable();
         }
     }
+    */
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if(btAdapter != null && btToggled == 1) {
-            btAdapter.disable();
+            btAdapter.disable(); // This is good manners
         }
     }
 
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_basil, menu);
@@ -188,6 +211,7 @@ public class BASIL extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    */
 
     public void btControl(View view) {
         // TODO: Decide how to handle (un)lock functionality
@@ -199,19 +223,24 @@ public class BASIL extends AppCompatActivity {
      *
      * Each connection corresponds to a Button on the main activity, which a user can use to
      * connect to that device and take appropriate action.
+     *
+     * For now, since I am unable to discover BlueTooth devices, I will only be showing
+     * paired devices. Once this is resolved, I will be using the second activity that I
+     * created and implementing the file system that I started with.
      */
     private int getNumConnections() {
         int cons = 0;
-        String conLine;
-        String[] conInfo;
-        FileInputStream conInStream;
-        conFile = new File(getBaseContext().getFilesDir(), conFileName);
+        //String conLine;
+        //String[] conInfo;
+        //FileInputStream conInStream;
+        //conFile = new File(getBaseContext().getFilesDir(), conFileName);
 
         // I will use this to redraw the UI, so let's make all buttons invisible here
         for(Button bts : butList){
             bts.setVisibility(View.INVISIBLE);
         }
 
+        /*
         if(!conFile.exists()) {
             try {
                 if(conFile.createNewFile()) {
@@ -243,9 +272,36 @@ public class BASIL extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return cons;
+        */
+
+        if(btAdapter == null || !btAdapter.isEnabled()) {
+            Toast.makeText(getBaseContext(), R.string.bt_mode_disabled,
+                    Toast.LENGTH_LONG).show();
+            return 0;
+        }
+
+        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
+        if (pairedDevices.size() > 0) {
+            for(BluetoothDevice device : pairedDevices) {
+                // First make sure that we will not throw a null pointer exception
+                if(cons >= MAX_CONNECTIONS) {
+                    Toast.makeText(getBaseContext(), R.string.too_many_connections,
+                            Toast.LENGTH_LONG).show();
+                    return MAX_CONNECTIONS;
+                }
+
+                String deviceName = device.getName();
+                butList.get(cons).setText(deviceName);
+                butList.get(cons).setVisibility(View.VISIBLE);
+                ++cons;
+            }
+        }
+
+        return pairedDevices.size();
+        //return cons;
     }
 
+    /*
     private void addConnection(String connToAdd) {
         if(connToAdd == null || connToAdd.isEmpty()){
             Toast.makeText(getBaseContext(), R.string.nothing_to_add, Toast.LENGTH_LONG).show();
@@ -298,7 +354,9 @@ public class BASIL extends AppCompatActivity {
 
         numConnections = getNumConnections(); // Increment and add make button visible
     }
+    */
 
+    /*
     private void rmConnection(String ctr) { // Delete the line with this info (name)
         String tmpFileName = "tmp.txt";
         String conLine;
@@ -349,7 +407,9 @@ public class BASIL extends AppCompatActivity {
         }
         tmpFile.renameTo(conFile);
     }
+    */
 
+    /*
     private void clearAllCons() { //Used to reset the connection database from menu
         if (conFile.exists()) {
             try {
@@ -371,4 +431,5 @@ public class BASIL extends AppCompatActivity {
 
         numConnections = getNumConnections();
     }
+    */
 }

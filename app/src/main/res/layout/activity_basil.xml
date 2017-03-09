@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
     android:fitsSystemWindows="true"
     android:background="@color/colorPureWhite"
     tools:context="edu.oit.basil.BASIL">
@@ -24,6 +25,7 @@
 
     <include layout="@layout/content_basil" />
 
+    <!--
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_bluetooth_device"
         android:layout_width="wrap_content"
@@ -32,5 +34,6 @@
         android:background="@color/colorBasil"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_input_add" />
+        -->
 
 </android.support.design.widget.CoordinatorLayout>
