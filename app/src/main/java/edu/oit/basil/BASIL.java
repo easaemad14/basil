@@ -2,6 +2,7 @@ package edu.oit.basil;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +25,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static android.bluetooth.BluetoothDevice.ACTION_BOND_STATE_CHANGED;
+import static android.bluetooth.BluetoothDevice.BOND_BONDED;
+
 /**
  * TODO: Figure out why I can't discover devices in my app and uncomment everything
  *
@@ -38,10 +42,12 @@ public class BASIL extends AppCompatActivity {
     private final static int REQUEST_ENABLE_BT = 1;
     private final static int REQUEST_CONTROL_MOTOR = 2;
     private final static int NEW_CONNECTION = 3;
-    private int btToggled = 0; // If we turned on BT for our app, turn off when done
+    private boolean btToggled = false; // If we turned on BT for our app, turn off when done
     private int numConnections = 0;
+    private int locked = 0;
     List<Button> butList = new ArrayList<Button>();
     BluetoothAdapter btAdapter;
+    BluetoothDevice btDevice;
 
     // If File information ever changes, there's a potential to lose data.
     // In this event, be sure to adjust accordingly.
@@ -138,7 +144,7 @@ public class BASIL extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                 }
                 else {
-                    btToggled = 1;
+                    btToggled = true;
                 }
                 break;
             case REQUEST_CONTROL_MOTOR:
@@ -185,7 +191,7 @@ public class BASIL extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(btAdapter != null && btToggled == 1) {
+        if(btAdapter != null && btToggled == true) {
             btAdapter.disable(); // This is good manners
         }
     }
@@ -214,7 +220,19 @@ public class BASIL extends AppCompatActivity {
     */
 
     public void btControl(View view) {
-        // TODO: Decide how to handle (un)lock functionality
+        if(btDevice.getBondState() != BOND_BONDED) {
+            Toast.makeText(getBaseContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
+        }
+        else {
+            if(locked == 1) {
+                Toast.makeText(getBaseContext(), R.string.unlock, Toast.LENGTH_SHORT).show();
+                locked = 0;
+            }
+            else {
+                Toast.makeText(getBaseContext(), R.string.lock, Toast.LENGTH_SHORT).show();
+                locked = 1;
+            }
+        }
     }
 
     /**
@@ -293,6 +311,14 @@ public class BASIL extends AppCompatActivity {
                 String deviceName = device.getName();
                 butList.get(cons).setText(deviceName);
                 butList.get(cons).setVisibility(View.VISIBLE);
+
+                // HACKS
+                if(deviceName.equals("BTSK")) {
+                    btDevice = device;
+                    if(device.getBondState() != BOND_BONDED) {
+                        locked = 1;
+                    }
+                }
                 ++cons;
             }
         }

@@ -16,6 +16,9 @@
     <string name="connection_exists">Connection already exists</string>
     <string name="delete_file">Error Deleting File</string>
     <string name="unknown_result">Caught Unknown Result</string>
+    <string name="unable_to_connect">Unable to connect to device</string>
+    <string name="unlock">Unlocking Device</string>
+    <string name="lock">Locking Device</string>
 
     <!-- Activity BT discovery -->
     <string name="title_activity_bt_discovery">Searching for BlueTooth Devices</string>
