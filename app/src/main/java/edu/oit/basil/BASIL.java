@@ -145,6 +145,7 @@ public class BASIL extends AppCompatActivity {
                 }
                 else {
                     btToggled = true;
+                    getNumConnections();
                 }
                 break;
             case REQUEST_CONTROL_MOTOR:
@@ -191,7 +192,7 @@ public class BASIL extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(btAdapter != null && btToggled == true) {
+        if(btAdapter != null && btAdapter.isEnabled() && btToggled == true) {
             btAdapter.disable(); // This is good manners
         }
     }
@@ -219,19 +220,23 @@ public class BASIL extends AppCompatActivity {
     }
     */
 
+    /*
+     * Hacking the system:
+     *
+     * Since this was done in a crunch and I lost interest in going back to ensure that this is done
+     * the way that I think it should be done, I am hacking it to toggle the btAdapter and have the
+     * firmware unlock upon connection and lock on disconnect.
+     */
     public void btControl(View view) {
-        if(btDevice.getBondState() != BOND_BONDED) {
-            Toast.makeText(getBaseContext(), R.string.unable_to_connect, Toast.LENGTH_LONG).show();
+        if(locked == 1) {
+            Toast.makeText(getBaseContext(), R.string.unlock, Toast.LENGTH_SHORT).show();
+            btAdapter.enable();
+            locked = 0;
         }
         else {
-            if(locked == 1) {
-                Toast.makeText(getBaseContext(), R.string.unlock, Toast.LENGTH_SHORT).show();
-                locked = 0;
-            }
-            else {
-                Toast.makeText(getBaseContext(), R.string.lock, Toast.LENGTH_SHORT).show();
-                locked = 1;
-            }
+            Toast.makeText(getBaseContext(), R.string.lock, Toast.LENGTH_SHORT).show();
+            btAdapter.disable();
+            locked = 1;
         }
     }
 
@@ -312,13 +317,6 @@ public class BASIL extends AppCompatActivity {
                 butList.get(cons).setText(deviceName);
                 butList.get(cons).setVisibility(View.VISIBLE);
 
-                // HACKS
-                if(deviceName.equals("BTSK")) {
-                    btDevice = device;
-                    if(device.getBondState() != BOND_BONDED) {
-                        locked = 1;
-                    }
-                }
                 ++cons;
             }
         }
