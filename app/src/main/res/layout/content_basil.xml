@@ -1,78 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_basil"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.oit.basil.BASIL"
-    tools:showIn="@layout/activity_basil">
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="horizontal"
+    android:gravity="center">
 
-    <!--
-        These buttons will have a different text corresponding the the Bluetooth connection
-        name for different IDs, but in our implementation, we will only have one connection.
-
-        These are the default values for each button. Visibility is set in Basil.java. Once
-        I get good, I will set the layout of each button there, as well as text based off of
-        the connect that it represents (read from a file) and any other information.
-      -->
     <Button
-        android:id="@+id/Button0"
+        android:id="@+id/Button"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorBasil"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="false"
+        android:text="BASIL"
         android:textSize="20sp"
         android:onClick="btControl"
         android:longClickable="true"
         android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/Button1"
-        android:layout_below="@id/Button0"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorBasil"
-        android:textSize="20sp"
-        android:onClick="btControl"
-        android:longClickable="true"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/Button2"
-        android:layout_below="@id/Button1"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorBasil"
-        android:textSize="20sp"
-        android:onClick="btControl"
-        android:longClickable="true"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/Button3"
-        android:layout_below="@id/Button2"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorBasil"
-        android:textSize="20sp"
-        android:onClick="btControl"
-        android:longClickable="true"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/Button4"
-        android:layout_below="@id/Button3"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorBasil"
-        android:textSize="20sp"
-        android:onClick="btControl"
-        android:longClickable="true"
-        android:visibility="gone"/>
-</RelativeLayout>
+</LinearLayout>
